@@ -5,6 +5,10 @@
 # include <stdlib.h>
 # include <string.h>
 # include <stdbool.h>
+# include <stdint.h>
+
+# define TABLE_MAX_PAGES 100
+# define size_of_attribute(Struct, Attribute) sizeof(((Struct *)0)->Attribute)
 
 typedef enum meta_command_result_e
 {
@@ -15,6 +19,7 @@ typedef enum meta_command_result_e
 typedef enum prepare_result_e
 {
     PREPARE_SUCCESS,
+    PREPARE_SYNTAX_ERROR,
     PREPARE_UNRECOGNIZED_STATEMENT
 }   prepare_result_t;
 
@@ -24,6 +29,12 @@ typedef enum statement_type_e
     STATEMENT_SELECT
 }   statement_type_t;
 
+typedef enum execute_result_e
+{
+    EXECUTE_SUCCESS,
+    EXECUTE_TABLE_FULL
+}   execute_result_t;
+
 typedef struct input_buffer_s
 {
     char    *buffer;
@@ -31,10 +42,61 @@ typedef struct input_buffer_s
     ssize_t input_length;
 }   input_buffer_t;
 
+typedef struct table_s
+{
+    uint32_t    num_rows;
+    void        *pages[TABLE_MAX_PAGES];
+}   table_t;
+
+typedef struct row_s
+{
+    uint32_t    id;
+    char        username[32];
+    char        email[255];
+}   row_t;
+
 typedef struct statement_s
 {
     statement_type_t    type;
+    row_t               row_to_insert;
 }   statement_t;
+
+// globals.c
+
+extern const uint32_t  ID_SIZE;
+extern const uint32_t  USERNAME_SIZE;
+extern const uint32_t  EMAIL_SIZE;
+extern const uint32_t  ID_OFFSET;
+extern const uint32_t  USERNAME_OFFSET;
+extern const uint32_t  EMAIL_OFFSET;
+extern const uint32_t  ROW_SIZE;
+extern const uint32_t  PAGE_SIZE;
+extern const uint32_t  ROWS_PER_PAGE;
+extern const uint32_t  TABLE_MAX_ROWS;
+
+// input_buffer.c
+
+input_buffer_t  *input_buffer_new();
+void            input_buffer_close(input_buffer_t *input_buffer);
+
+// table.c
+
+table_t         *table_new();
+void            table_free(table_t *table);
+
+// row.c
+
+void            row_serialize(row_t *src, void *dest);
+void            row_deserialize(void *src, row_t *dest);
+void            *row_slot(table_t *table, uint32_t row_num);
+
+// meta_command.c
+
+void            meta_command_init(input_buffer_t *input_buffer, table_t *table);
+
+// statement.c
+
+void            statement_init(input_buffer_t *input_buffer, table_t *table);
 
 #endif /* __SQLITECLONE_H__ */
 

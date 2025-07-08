@@ -2,7 +2,7 @@ NAME = sqliteclone
 
 CC = clang
 
-CFLAGS = -Werror -Wall -Wextra
+CFLAGS = -Werror -Wall -Wextra -g
 
 SRC_DIR = src/
 SRC = $(wildcard $(SRC_DIR)*.c)
