@@ -7,7 +7,7 @@ input_buffer_new()
 
     input_buffer = malloc(sizeof(*input_buffer));
     if (!input_buffer)
-        exit(EXIT_FAILURE);
+        return NULL;
     input_buffer->buffer = NULL;
     input_buffer->buffer_length = 0;
     input_buffer->input_length = 0;

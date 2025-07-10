@@ -8,7 +8,23 @@
 # include <stdint.h>
 
 # define TABLE_MAX_PAGES 100
+# define COLUMN_USERNAME_SIZE 32
+# define COLUMN_EMAIL_SIZE 255
 # define size_of_attribute(Struct, Attribute) sizeof(((Struct *)0)->Attribute)
+
+// globals.c
+
+extern const uint32_t  ID_SIZE;
+extern const uint32_t  USERNAME_SIZE;
+extern const uint32_t  EMAIL_SIZE;
+extern const uint32_t  ID_OFFSET;
+extern const uint32_t  USERNAME_OFFSET;
+extern const uint32_t  EMAIL_OFFSET;
+extern const uint32_t  ROW_SIZE;
+extern const uint32_t  PAGE_SIZE;
+extern const uint32_t  ROWS_PER_PAGE;
+extern const uint32_t  TABLE_MAX_ROWS;
+
 
 typedef enum meta_command_result_e
 {
@@ -20,6 +36,8 @@ typedef enum prepare_result_e
 {
     PREPARE_SUCCESS,
     PREPARE_SYNTAX_ERROR,
+    PREPARE_STRING_TOO_LONG,
+    PREPARE_NEGATIVE_ID,
     PREPARE_UNRECOGNIZED_STATEMENT
 }   prepare_result_t;
 
@@ -32,7 +50,8 @@ typedef enum statement_type_e
 typedef enum execute_result_e
 {
     EXECUTE_SUCCESS,
-    EXECUTE_TABLE_FULL
+    EXECUTE_TABLE_FULL,
+    EXECUTE_FATAL_ERROR
 }   execute_result_t;
 
 typedef struct input_buffer_s
@@ -51,8 +70,8 @@ typedef struct table_s
 typedef struct row_s
 {
     uint32_t    id;
-    char        username[32];
-    char        email[255];
+    char        username[COLUMN_USERNAME_SIZE + 1];
+    char        email[COLUMN_EMAIL_SIZE + 1];
 }   row_t;
 
 typedef struct statement_s
@@ -60,19 +79,6 @@ typedef struct statement_s
     statement_type_t    type;
     row_t               row_to_insert;
 }   statement_t;
-
-// globals.c
-
-extern const uint32_t  ID_SIZE;
-extern const uint32_t  USERNAME_SIZE;
-extern const uint32_t  EMAIL_SIZE;
-extern const uint32_t  ID_OFFSET;
-extern const uint32_t  USERNAME_OFFSET;
-extern const uint32_t  EMAIL_OFFSET;
-extern const uint32_t  ROW_SIZE;
-extern const uint32_t  PAGE_SIZE;
-extern const uint32_t  ROWS_PER_PAGE;
-extern const uint32_t  TABLE_MAX_ROWS;
 
 // input_buffer.c
 

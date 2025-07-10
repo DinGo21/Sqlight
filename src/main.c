@@ -21,13 +21,20 @@ read_input(input_buffer_t *input_buffer)
 }
 
 int
-main(void)
+main()
 {
     input_buffer_t  *input_buffer;
     table_t         *table;
 
     input_buffer = input_buffer_new();
+    if (!input_buffer)
+        return 1;
     table = table_new();
+    if (!table)
+    {
+        input_buffer_close(input_buffer);
+        return 1;
+    }
     while (true)
     {
         print_prompt();

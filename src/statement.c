@@ -1,14 +1,17 @@
 #include "sqliteclone.h"
+#include <string.h>
 
 static execute_result_t
 statement_exec_insert(statement_t *statement, table_t *table)
 {
-    row_t   *row_to_insert;
+    void    *slot;
 
     if (table->num_rows >= TABLE_MAX_ROWS)
         return EXECUTE_TABLE_FULL;
-    row_to_insert = &statement->row_to_insert;
-    row_serialize(row_to_insert, row_slot(table, table->num_rows));
+    slot = row_slot(table, table->num_rows);
+    if (!slot)
+        return EXECUTE_FATAL_ERROR;
+    row_serialize(&statement->row_to_insert, row_slot(table, table->num_rows));
     table->num_rows += 1;
     return EXECUTE_SUCCESS;
 }
@@ -43,7 +46,8 @@ statement_exec_type(statement_t *statement, table_t *table)
 }
 
 static void
-statement_exec(statement_t *statement, table_t *table)
+statement_exec(statement_t *statement, input_buffer_t *input_buffer,
+                table_t *table)
 {
     switch (statement_exec_type(statement, table))
     {
@@ -53,30 +57,49 @@ statement_exec(statement_t *statement, table_t *table)
         case (EXECUTE_TABLE_FULL):
             printf("Error: Table is full\n");
             break;
+        case (EXECUTE_FATAL_ERROR):
+            printf("Fatal error: Could not allocate memory\n");
+            input_buffer_close(input_buffer);
+            table_free(table);
+            exit(EXIT_FAILURE);
     }
+}
+
+static prepare_result_t
+statement_prepare_insert(input_buffer_t *input_buffer, statement_t *statement)
+{
+    int     id;
+    char    *id_string;
+    char    *username;
+    char    *email;
+
+    statement->type = STATEMENT_INSERT;
+    strtok(input_buffer->buffer, " ");
+    id_string = strtok(NULL, " ");
+    username = strtok(NULL, " ");
+    email = strtok(NULL, " ");
+    if (!id_string || !username || !email)
+        return PREPARE_SYNTAX_ERROR;
+    id = atoi(id_string);
+    if (id < 0)
+        return PREPARE_NEGATIVE_ID;
+    if (strlen(username) > COLUMN_USERNAME_SIZE)
+        return PREPARE_STRING_TOO_LONG;
+    if (strlen(email) > COLUMN_EMAIL_SIZE)
+        return PREPARE_STRING_TOO_LONG;
+    statement->row_to_insert.id = id;
+    strcpy(statement->row_to_insert.username, username);
+    strcpy(statement->row_to_insert.email, email);
+    return PREPARE_SUCCESS;
 }
 
 static prepare_result_t
 statement_prepare(input_buffer_t *input_buffer, statement_t *statement)
 {
-    int args;
-
     if (!strncmp(input_buffer->buffer, "insert", 6))
-    {
-        statement->type = STATEMENT_INSERT;
-        args = sscanf(input_buffer->buffer, "insert %d %s %s", 
-                        &statement->row_to_insert.id,
-                        statement->row_to_insert.username,
-                        statement->row_to_insert.email);
-        if (args < 3)
-            return PREPARE_SYNTAX_ERROR;
-        return PREPARE_SUCCESS;
-    }
+        return statement_prepare_insert(input_buffer, statement);
     if (!strcmp(input_buffer->buffer, "select"))
-    {
-        statement->type = STATEMENT_SELECT;
-        return PREPARE_SUCCESS;
-    }
+        return (statement->type = STATEMENT_SELECT, PREPARE_SUCCESS);
     return PREPARE_UNRECOGNIZED_STATEMENT;
 }
 
@@ -88,7 +111,7 @@ statement_init(input_buffer_t *input_buffer, table_t *table)
     switch (statement_prepare(input_buffer, &statement))
     {
         case (PREPARE_SUCCESS):
-            statement_exec(&statement, table);
+            statement_exec(&statement, input_buffer, table);
             break;
         case (PREPARE_UNRECOGNIZED_STATEMENT):
             printf("Unknown keyword: %s\n", input_buffer->buffer);
@@ -96,6 +119,11 @@ statement_init(input_buffer_t *input_buffer, table_t *table)
         case (PREPARE_SYNTAX_ERROR):
             printf("Syntax error: %s\n", input_buffer->buffer);
             break;
+        case (PREPARE_STRING_TOO_LONG):
+            printf("Error: string too long\n");
+            break;
+        case (PREPARE_NEGATIVE_ID):
+            printf("Error: negative id\n");
     }
 }
 
