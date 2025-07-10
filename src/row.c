@@ -1,4 +1,4 @@
-#include "sqliteclone.h"
+#include "sqlight.h"
 
 void
 row_serialize(row_t *src, void *dest)

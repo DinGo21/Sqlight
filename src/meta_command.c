@@ -1,4 +1,4 @@
-#include "sqliteclone.h"
+#include "sqlight.h"
 
 static meta_command_result_t
 meta_command_exec(input_buffer_t *input_buffer, table_t *table)

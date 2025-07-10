@@ -1,4 +1,4 @@
-#include "sqliteclone.h"
+#include "sqlight.h"
 
 table_t *
 table_new()

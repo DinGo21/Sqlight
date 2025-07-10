@@ -1,5 +1,5 @@
-#ifndef __SQLITECLONE_H__
-# define __SQLITECLONE_H__
+#ifndef __SQLIGHT_H__
+# define __SQLIGHT_H__
 
 # include <stdio.h>
 # include <stdlib.h>

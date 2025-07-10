@@ -1,5 +1,4 @@
-#include "sqliteclone.h"
-#include <string.h>
+#include "sqlight.h"
 
 static execute_result_t
 statement_exec_insert(statement_t *statement, table_t *table)

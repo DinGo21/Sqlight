@@ -1,4 +1,4 @@
-#include "sqliteclone.h"
+#include "sqlight.h"
 
 input_buffer_t *
 input_buffer_new()

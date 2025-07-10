@@ -1,4 +1,4 @@
-#include "sqliteclone.h"
+#include "sqlight.h"
 
 void
 print_prompt()
