@@ -25,13 +25,9 @@ row_slot(table_t *table, uint32_t row_num)
     void        *page;
 
     page_num = row_num / ROWS_PER_PAGE;
-    if (!table->pages[page_num])
-    {
-        table->pages[page_num] = malloc(PAGE_SIZE);
-        if (!table->pages[page_num])
-            return NULL;
-    }
-    page = table->pages[page_num];
+    page = pager_get_page(table->pager, page_num);
+    if (!page)
+        return NULL;
     row_offset = row_num % ROWS_PER_PAGE;
     byte_offset = row_offset * ROW_SIZE;
     return page + byte_offset;

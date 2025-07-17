@@ -3,6 +3,8 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
 # include <string.h>
 # include <stdbool.h>
 # include <stdint.h>
@@ -61,10 +63,17 @@ typedef struct input_buffer_s
     ssize_t input_length;
 }   input_buffer_t;
 
+typedef struct pager_s
+{
+    int         fd;
+    uint32_t    file_length;
+    void        *pages[TABLE_MAX_PAGES];
+}   pager_t;
+
 typedef struct table_s
 {
     uint32_t    num_rows;
-    void        *pages[TABLE_MAX_PAGES];
+    pager_t     *pager;
 }   table_t;
 
 typedef struct row_s
@@ -85,9 +94,15 @@ typedef struct statement_s
 input_buffer_t  *input_buffer_new();
 void            input_buffer_close(input_buffer_t *input_buffer);
 
+// pager.c
+
+pager_t         *pager_open(const char *filename);
+void            *pager_get_page(pager_t *pager, uint32_t page_num);
+int             pager_flush(pager_t *pager, uint32_t page_num, uint32_t size);
+
 // table.c
 
-table_t         *table_new();
+table_t         *table_new(const char *filename);
 void            table_free(table_t *table);
 
 // row.c

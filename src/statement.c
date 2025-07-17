@@ -10,7 +10,7 @@ statement_exec_insert(statement_t *statement, table_t *table)
     slot = row_slot(table, table->num_rows);
     if (!slot)
         return EXECUTE_FATAL_ERROR;
-    row_serialize(&statement->row_to_insert, row_slot(table, table->num_rows));
+    row_serialize(&statement->row_to_insert, slot);
     table->num_rows += 1;
     return EXECUTE_SUCCESS;
 }
@@ -57,7 +57,7 @@ statement_exec(statement_t *statement, input_buffer_t *input_buffer,
             printf("Error: Table is full\n");
             break;
         case (EXECUTE_FATAL_ERROR):
-            printf("Fatal error: Could not allocate memory\n");
+            printf("Fatal error\n");
             input_buffer_close(input_buffer);
             table_free(table);
             exit(EXIT_FAILURE);
