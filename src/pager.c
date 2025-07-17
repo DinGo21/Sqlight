@@ -1,4 +1,8 @@
-#include "sqlight.h"
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include "globals.h"
+#include "pager.h"
 
 int
 pager_flush(pager_t *pager, uint32_t page_num, uint32_t size)

@@ -1,4 +1,6 @@
-#include "sqlight.h"
+#include <string.h>
+#include "globals.h"
+#include "row.h"
 
 void
 row_serialize(row_t *src, void *dest)

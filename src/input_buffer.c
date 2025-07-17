@@ -1,4 +1,5 @@
-#include "sqlight.h"
+#include <stdlib.h>
+#include "input_buffer.h"
 
 input_buffer_t *
 input_buffer_new()

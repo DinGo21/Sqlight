@@ -1,4 +1,7 @@
-#include "sqlight.h"
+#include <stdlib.h>
+#include <string.h>
+#include "globals.h"
+#include "statement.h"
 
 static execute_result_t
 statement_exec_insert(statement_t *statement, table_t *table)

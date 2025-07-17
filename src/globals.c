@@ -1,4 +1,5 @@
-#include "sqlight.h"
+#include "globals.h"
+#include "row.h"
 
 const uint32_t  ID_SIZE = size_of_attribute(row_t, id);
 const uint32_t  USERNAME_SIZE = size_of_attribute(row_t, username);

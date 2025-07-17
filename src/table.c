@@ -1,4 +1,7 @@
-#include "sqlight.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include "globals.h"
+#include "table.h"
 
 table_t *
 table_new(const char *filename)

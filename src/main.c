@@ -1,4 +1,9 @@
-#include "sqlight.h"
+#include <stdio.h>
+#include <stdbool.h>
+#include "input_buffer.h"
+#include "meta_command.h"
+#include "statement.h"
+#include "table.h"
 
 void
 print_prompt()
