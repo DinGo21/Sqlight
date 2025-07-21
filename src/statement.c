@@ -1,37 +1,50 @@
 #include <stdlib.h>
 #include <string.h>
+#include "cursor.h"
 #include "globals.h"
 #include "statement.h"
 
 static execute_result_t
 statement_exec_insert(statement_t *statement, table_t *table)
 {
-    void    *slot;
+    void        *slot;
+    cursor_t    *cursor;
 
+    cursor = cursor_table_end(table);
+    if (!cursor)
+        return EXECUTE_FATAL_ERROR;
     if (table->num_rows >= TABLE_MAX_ROWS)
         return EXECUTE_TABLE_FULL;
-    slot = row_slot(table, table->num_rows);
+    slot = cursor_value(cursor);
     if (!slot)
         return EXECUTE_FATAL_ERROR;
     row_serialize(&statement->row_to_insert, slot);
     table->num_rows += 1;
+    free(cursor);
     return EXECUTE_SUCCESS;
 }
 
 static execute_result_t
 statement_exec_select(statement_t *statement, table_t *table)
 {
-    uint32_t    i;
     row_t       row;
+    void        *slot;
+    cursor_t    *cursor;
 
-    i = 0;
     (void)statement;
-    while (i < table->num_rows)
+    cursor = cursor_table_start(table);
+    if (!cursor)
+        return EXECUTE_FATAL_ERROR;
+    while (!cursor->end_of_table)
     {
-        row_deserialize(row_slot(table, i), &row);
+        slot = cursor_value(cursor);
+        if (!slot)
+            return EXECUTE_FATAL_ERROR;
+        row_deserialize(slot, &row);
         printf("(%d, %s, %s)\n", row.id, row.username, row.email);
-        i++;
+        cursor_advance(cursor);
     }
+    free(cursor);
     return EXECUTE_SUCCESS;
 }
 
