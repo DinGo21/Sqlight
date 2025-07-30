@@ -9,12 +9,13 @@ typedef struct pager_s
 {
     int         fd;
     uint32_t    file_length;
+    uint32_t    num_pages;
     void        *pages[TABLE_MAX_PAGES];
 }   pager_t;
 
 pager_t *pager_open(const char *filename);
 void    *pager_get_page(pager_t *pager, uint32_t page_num);
-int     pager_flush(pager_t *pager, uint32_t page_num, uint32_t size);
+int     pager_flush(pager_t *pager, uint32_t page_num);
 
 #endif
 

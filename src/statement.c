@@ -1,25 +1,26 @@
 #include <stdlib.h>
 #include <string.h>
-#include "cursor.h"
 #include "globals.h"
+#include "node.h"
 #include "statement.h"
 
 static execute_result_t
 statement_exec_insert(statement_t *statement, table_t *table)
 {
-    void        *slot;
+    void        *node;
     cursor_t    *cursor;
 
     cursor = cursor_table_end(table);
-    if (!cursor)
+    if (cursor == NULL)
         return EXECUTE_FATAL_ERROR;
-    if (table->num_rows >= TABLE_MAX_ROWS)
+    node = pager_get_page(table->pager, table->root_page_num);
+    if (node == NULL)
+        return EXECUTE_FATAL_ERROR;
+    if (*node_leaf_num_cells(node) >= LEAF_NODE_MAX_CELLS)
         return EXECUTE_TABLE_FULL;
-    slot = cursor_value(cursor);
-    if (!slot)
+    if (node_leaf_insert(cursor, statement->row_to_insert.id,
+                &statement->row_to_insert) < 0)
         return EXECUTE_FATAL_ERROR;
-    row_serialize(&statement->row_to_insert, slot);
-    table->num_rows += 1;
     free(cursor);
     return EXECUTE_SUCCESS;
 }
@@ -33,7 +34,7 @@ statement_exec_select(statement_t *statement, table_t *table)
 
     (void)statement;
     cursor = cursor_table_start(table);
-    if (!cursor)
+    if (cursor == NULL)
         return EXECUTE_FATAL_ERROR;
     while (!cursor->end_of_table)
     {
@@ -42,7 +43,8 @@ statement_exec_select(statement_t *statement, table_t *table)
             return EXECUTE_FATAL_ERROR;
         row_deserialize(slot, &row);
         printf("(%d, %s, %s)\n", row.id, row.username, row.email);
-        cursor_advance(cursor);
+        if (cursor_advance(cursor) < 0)
+            return EXECUTE_FATAL_ERROR;
     }
     free(cursor);
     return EXECUTE_SUCCESS;
