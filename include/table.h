@@ -9,8 +9,21 @@ typedef struct table_s
     pager_t     *pager;
 }   table_t;
 
+/**
+ * Creates new table.
+ *
+ * @param filename Path to database.
+ *
+ * @return Pointer to the new table or NULL in case of error.
+ */
 table_t *table_new(const char *filename);
+
+/**
+ * Frees table.
+ *
+ * @param table Pointer to the table;
+ */
 void    table_free(table_t *table);
 
-#endif
+#endif /* TABLE_H */
 

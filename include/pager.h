@@ -13,9 +13,34 @@ typedef struct pager_s
     void        *pages[TABLE_MAX_PAGES];
 }   pager_t;
 
+/**
+ * Opens new pager.
+ *
+ * @param filename Path to database.
+ *
+ * @return Pointer to the new pager or NULL in case of error.
+ */
 pager_t *pager_open(const char *filename);
+
+/**
+ * Gets `page_num` page from `pager`.
+ *
+ * @param pager Pointer to pager.
+ * @param page_num Number of page.
+ *
+ * @returns Pointer to the requested page or NULL in case of error.
+ */
 void    *pager_get_page(pager_t *pager, uint32_t page_num);
+
+/**
+ * Flush `page_num` page from `pager` into the database.
+ *
+ * @param pager Pointer to pager.
+ * @param page_num Number of page.
+ *
+ * @return 0 when successful, otherwise returns -1.  
+ */
 int     pager_flush(pager_t *pager, uint32_t page_num);
 
-#endif
+#endif /* PAGER_H */
 

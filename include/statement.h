@@ -32,6 +32,12 @@ typedef struct statement_s
     row_t               row_to_insert;
 }   statement_t;
 
+/**
+ * Initializes the statement process.
+ *
+ * @param input_buffer Pointer to the input buffer.
+ * @param table Pointer to the table.
+ */
 void    statement_init(input_buffer_t *input_buffer, table_t *table);
 
 #endif

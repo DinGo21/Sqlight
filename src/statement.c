@@ -10,13 +10,13 @@ statement_exec_insert(statement_t *statement, table_t *table)
     void        *node;
     cursor_t    *cursor;
 
-    cursor = cursor_table_end(table);
+    cursor = cursor_init_to_end(table);
     if (cursor == NULL)
         return EXECUTE_FATAL_ERROR;
     node = pager_get_page(table->pager, table->root_page_num);
     if (node == NULL)
         return EXECUTE_FATAL_ERROR;
-    if (*node_leaf_num_cells(node) >= LEAF_NODE_MAX_CELLS)
+    if (*node_leaf_move_to_num_cells(node) >= LEAF_NODE_MAX_CELLS)
         return EXECUTE_TABLE_FULL;
     if (node_leaf_insert(cursor, statement->row_to_insert.id,
                 &statement->row_to_insert) < 0)
@@ -33,12 +33,12 @@ statement_exec_select(statement_t *statement, table_t *table)
     cursor_t    *cursor;
 
     (void)statement;
-    cursor = cursor_table_start(table);
+    cursor = cursor_init_to_start(table);
     if (cursor == NULL)
         return EXECUTE_FATAL_ERROR;
     while (!cursor->end_of_table)
     {
-        slot = cursor_value(cursor);
+        slot = cursor_get_value(cursor);
         if (!slot)
             return EXECUTE_FATAL_ERROR;
         row_deserialize(slot, &row);

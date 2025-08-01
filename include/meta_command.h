@@ -10,6 +10,12 @@ typedef enum meta_command_result_e
     META_COMMAND_UNRECOGNIZED_COMMAND
 }   meta_command_result_t;
 
+/**
+ * Initializes the meta_command process.
+ *
+ * @param input_buffer Pointer to the input buffer.
+ * @param table Pointer to the table.
+ */
 void    meta_command_init(input_buffer_t *input_buffer, table_t *table);
 
 #endif

@@ -17,12 +17,12 @@ meta_command_print_leaf_node(table_t *table)
     node = pager_get_page(table->pager, 0);
     if (node == NULL)
         return;
-    num_cells = *node_leaf_num_cells(node);
+    num_cells = *node_leaf_move_to_num_cells(node);
     printf("leaf (size %d)\n", num_cells);
     i = 0;
     while (i < num_cells)
     {
-        key = *node_leaf_key(node, i);
+        key = *node_leaf_move_to_key(node, i);
         printf(" - %d: %d\n", i, key);
         i++;
     }

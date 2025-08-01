@@ -21,7 +21,7 @@ table_new(const char *filename)
     if (!pager->num_pages)
     {
         root_node = pager_get_page(pager, 0);
-        node_leaf_initialize(root_node);
+        node_leaf_init(root_node);
     }
     table->pager = pager;
     return table;

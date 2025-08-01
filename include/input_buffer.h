@@ -11,7 +11,18 @@ typedef struct input_buffer_s
     ssize_t input_length;
 }   input_buffer_t;
 
+/**
+ * Creates new input buffer.
+ *
+ * @return Pointer to the input buffer or NULL in case of error.
+ */
 input_buffer_t  *input_buffer_new();
+
+/**
+ * Closes input buffer.
+ *
+ * @param input_buffer Pointer to the input buffer.
+ */
 void            input_buffer_close(input_buffer_t *input_buffer);
 
 #endif
