@@ -23,6 +23,7 @@ typedef enum execute_result_e
 {
     EXECUTE_SUCCESS,
     EXECUTE_TABLE_FULL,
+    EXECUTE_DUPLICATE_KEY,
     EXECUTE_FATAL_ERROR
 }   execute_result_t;
 
@@ -40,5 +41,5 @@ typedef struct statement_s
  */
 void    statement_init(input_buffer_t *input_buffer, table_t *table);
 
-#endif
+#endif /* STATEMENT_H */
 

@@ -1,9 +1,9 @@
 #ifndef NODE_H
 # define NODE_H
 
+#include <stdint.h>
 #include "cursor.h"
 #include "row.h"
-#include <stdint.h>
 
 typedef enum node_type_e
 {
@@ -67,6 +67,12 @@ void        node_leaf_init(void *node);
  * @return 0 when successful, otherwise returns -1.
  */
 int         node_leaf_insert(cursor_t *cursor, uint32_t key, row_t *value);
+
+uint32_t    node_leaf_find_cell_num(void *node, uint32_t key);
+
+node_type_t node_get_type(void *node);
+
+void        node_set_type(void *node, node_type_t type);
 
 #endif /* NODE_H */
 

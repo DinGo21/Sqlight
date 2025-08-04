@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include "cursor.h"
 #include "globals.h"
 #include "node.h"
 #include "statement.h"
@@ -9,15 +10,24 @@ statement_exec_insert(statement_t *statement, table_t *table)
 {
     void        *node;
     cursor_t    *cursor;
+    uint32_t    num_cells;
+    uint32_t    key_at_index;
 
-    cursor = cursor_init_to_end(table);
+    cursor = cursor_find(table, statement->row_to_insert.id);
     if (cursor == NULL)
         return EXECUTE_FATAL_ERROR;
     node = pager_get_page(table->pager, table->root_page_num);
     if (node == NULL)
         return EXECUTE_FATAL_ERROR;
-    if (*node_leaf_move_to_num_cells(node) >= LEAF_NODE_MAX_CELLS)
+    num_cells = *node_leaf_move_to_num_cells(node);
+    if (num_cells >= LEAF_NODE_MAX_CELLS)
         return EXECUTE_TABLE_FULL;
+    if (cursor->cell_num < num_cells)
+    {
+        key_at_index = *node_leaf_move_to_key(node, cursor->cell_num);
+        if (key_at_index == statement->row_to_insert.id)
+            return EXECUTE_DUPLICATE_KEY;
+    }
     if (node_leaf_insert(cursor, statement->row_to_insert.id,
                 &statement->row_to_insert) < 0)
         return EXECUTE_FATAL_ERROR;
@@ -73,6 +83,9 @@ statement_exec(statement_t *statement, input_buffer_t *input_buffer,
             break;
         case (EXECUTE_TABLE_FULL):
             printf("Error: Table is full\n");
+            break;
+        case (EXECUTE_DUPLICATE_KEY):
+            printf("Error: Duplicate key\n");
             break;
         case (EXECUTE_FATAL_ERROR):
             printf("Fatal error\n");

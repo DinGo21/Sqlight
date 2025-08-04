@@ -1,7 +1,9 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "cursor.h"
 #include "pager.h"
 #include "node.h"
+#include "table.h"
 
 cursor_t *
 cursor_init_to_start(table_t *table)
@@ -40,6 +42,29 @@ cursor_init_to_end(table_t *table)
         return NULL;
     cursor->cell_num = *node_leaf_move_to_num_cells(root_node);
     cursor->end_of_table = 1;
+    return cursor;
+}
+
+cursor_t *
+cursor_find(table_t *table, uint32_t key)
+{
+    void        *node;
+    cursor_t    *cursor;
+
+    node = pager_get_page(table->pager, table->root_page_num);
+    if (node == NULL)
+        return NULL;
+    if (node_get_type(node) != NODE_LEAF)
+    {
+        printf("Need to implement searching n internal node\n");
+        return NULL;
+    }
+    cursor = malloc(sizeof(*cursor));
+    if (cursor == NULL)
+        return NULL;
+    cursor->table = table;
+    cursor->page_num = table->root_page_num;
+    cursor->cell_num = node_leaf_find_cell_num(node, key);
     return cursor;
 }
 

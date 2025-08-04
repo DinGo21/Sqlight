@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include "input_buffer.h"
 #include "meta_command.h"
 #include "statement.h"
@@ -39,7 +38,7 @@ main(int argc, char *argv[])
     table = table_new(argv[1]);
     if (!table)
         return (input_buffer_close(input_buffer), 1);
-    while (true)
+    while (1)
     {
         print_prompt();
         if (read_input(input_buffer) < 0)
