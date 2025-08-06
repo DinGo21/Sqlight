@@ -6,7 +6,7 @@
 #include "pager.h"
 
 int
-pager_flush(pager_t *pager, uint32_t page_num)
+pager_flush(pager_t *pager, const uint32_t page_num)
 {
     if (!pager->pages[page_num])
         return -1;
@@ -18,7 +18,7 @@ pager_flush(pager_t *pager, uint32_t page_num)
 }
 
 void *
-pager_get_page(pager_t *pager, uint32_t page_num)
+pager_get_page(pager_t *pager, const uint32_t page_num)
 {
     uint32_t    num_pages;
     ssize_t     bytes_read;

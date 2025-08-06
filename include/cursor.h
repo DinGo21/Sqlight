@@ -38,7 +38,7 @@ cursor_t    *cursor_init_to_end(table_t *table);
  * @return Pointer to the cursor positioned at the key, if the key is not
  * present returns the position where it should be or NULL in case of error.
  */
-cursor_t    *cursor_find(table_t *table, uint32_t key);
+cursor_t    *cursor_find(table_t *table, const uint32_t key);
 
 /**
  * Gets the current value `cursor` is pointing to.
@@ -47,7 +47,7 @@ cursor_t    *cursor_find(table_t *table, uint32_t key);
  *
  * @return Pointer to the value.
  */
-void        *cursor_get_value(cursor_t *cursor);
+void        *cursor_get_value(const cursor_t *cursor);
 
 /**
  * Advances up to one cell from the table `cursor` is pointing to.

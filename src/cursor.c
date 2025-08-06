@@ -46,7 +46,7 @@ cursor_init_to_end(table_t *table)
 }
 
 cursor_t *
-cursor_find(table_t *table, uint32_t key)
+cursor_find(table_t *table, const uint32_t key)
 {
     void        *node;
     cursor_t    *cursor;
@@ -69,7 +69,7 @@ cursor_find(table_t *table, uint32_t key)
 }
 
 void *
-cursor_get_value(cursor_t *cursor)
+cursor_get_value(const cursor_t *cursor)
 {
     void        *page;
 

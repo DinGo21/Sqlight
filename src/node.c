@@ -14,25 +14,25 @@ node_leaf_move_to_num_cells(void *node)
 }
 
 void *
-node_leaf_move_to_cell(void *node, uint32_t cell_num)
+node_leaf_move_to_cell(void *node, const uint32_t cell_num)
 {
     return node + LEAF_NODE_HEADER_SIZE + cell_num * LEAF_NODE_CELL_SIZE;
 }
 
 uint32_t *
-node_leaf_move_to_key(void *node, uint32_t cell_num)
+node_leaf_move_to_key(void *node, const uint32_t cell_num)
 {
     return node_leaf_move_to_cell(node, cell_num);
 }
 
 void *
-node_leaf_move_to_value(void *node, uint32_t cell_num)
+node_leaf_move_to_value(void *node, const uint32_t cell_num)
 {
     return node_leaf_move_to_cell(node, cell_num) + LEAF_NODE_KEY_SIZE;
 }
 
 node_type_t
-node_get_type(void *node)
+node_get_type(const void *node)
 {
     return *((uint8_t *)(node + NODE_TYPE_OFFSET));
 }
@@ -51,7 +51,7 @@ node_leaf_init(void *node)
 }
 
 int
-node_leaf_insert(cursor_t *cursor, uint32_t key, row_t *value)
+node_leaf_insert(cursor_t *cursor, const uint32_t key, row_t *value)
 {
     void        *node;
     uint32_t    num_cells;
@@ -83,7 +83,7 @@ node_leaf_insert(cursor_t *cursor, uint32_t key, row_t *value)
 }
 
 uint32_t
-node_leaf_find_cell_num(void *node, uint32_t key)
+node_leaf_find_cell_num(void *node, const uint32_t key)
 {
     uint32_t    min_index;
     uint32_t    past_max_index;
