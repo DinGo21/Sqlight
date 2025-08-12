@@ -48,6 +48,12 @@ pager_get_page(pager_t *pager, const uint32_t page_num)
     return pager->pages[page_num];
 }
 
+uint32_t
+pager_get_unused_page_num(pager_t *pager)
+{
+    return pager->num_pages;
+}
+
 pager_t *
 pager_open(const char *filename)
 {

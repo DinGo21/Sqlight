@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cursor.h"
-#include "globals.h"
 #include "node.h"
 #include "statement.h"
 
@@ -20,8 +19,6 @@ statement_exec_insert(statement_t *statement, table_t *table)
     if (node == NULL)
         return EXECUTE_FATAL_ERROR;
     num_cells = *node_leaf_move_to_num_cells(node);
-    if (num_cells >= LEAF_NODE_MAX_CELLS)
-        return EXECUTE_TABLE_FULL;
     if (cursor->cell_num < num_cells)
     {
         key_at_index = *node_leaf_move_to_key(node, cursor->cell_num);

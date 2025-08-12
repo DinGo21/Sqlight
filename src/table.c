@@ -22,6 +22,7 @@ table_new(const char *filename)
     {
         root_node = pager_get_page(pager, 0);
         node_leaf_init(root_node);
+        node_set_root(root_node, 1);
     }
     table->pager = pager;
     return table;

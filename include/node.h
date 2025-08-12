@@ -11,6 +11,18 @@ typedef enum node_type_e
     NODE_LEAF
 }   node_type_t;
 
+node_type_t node_get_type(const void *node);
+
+void        node_set_type(void *node, node_type_t type);
+
+int         node_create_root(table_t *table, uint32_t right_child_page_num);
+
+uint32_t    node_get_max_key(void *node);
+
+int         node_is_root(void *node);
+
+void        node_set_root(void *node, int is_root);
+
 /**
  * Moves `node` pointer up to num_cells offset.
  *
@@ -70,9 +82,19 @@ int         node_leaf_insert(cursor_t *cursor, const uint32_t key, row_t *value)
 
 uint32_t    node_leaf_find_cell_num(void *node, const uint32_t key);
 
-node_type_t node_get_type(const void *node);
+void        node_internal_init(void *node);
 
-void        node_set_type(void *node, node_type_t type);
+uint32_t    node_internal_find_key(void *node, uint32_t key);
+
+uint32_t    *node_internal_move_to_num_keys(void *node);
+
+uint32_t    *node_internal_move_to_right_child(void *node);
+
+uint32_t    *node_internal_move_to_cell(void *node, uint32_t cell_num);
+
+uint32_t    *node_internal_move_to_child(void *node, uint32_t child_num);
+
+uint32_t    *node_internal_move_to_key(void *node, uint32_t key_num);
 
 #endif /* NODE_H */
 

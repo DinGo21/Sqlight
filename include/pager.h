@@ -20,7 +20,7 @@ typedef struct pager_s
  *
  * @return Pointer to the new pager or NULL in case of error.
  */
-pager_t *pager_open(const char *filename);
+pager_t     *pager_open(const char *filename);
 
 /**
  * Gets `page_num` page from `pager`.
@@ -30,7 +30,10 @@ pager_t *pager_open(const char *filename);
  *
  * @returns Pointer to the requested page or NULL in case of error.
  */
-void    *pager_get_page(pager_t *pager, const uint32_t page_num);
+void        *pager_get_page(pager_t *pager, const uint32_t page_num);
+
+//TODO: Add comment
+uint32_t    pager_get_unused_page_num(pager_t *pager); 
 
 /**
  * Flush `page_num` page from `pager` into the database.
@@ -40,7 +43,7 @@ void    *pager_get_page(pager_t *pager, const uint32_t page_num);
  *
  * @return 0 when successful, otherwise returns -1.  
  */
-int     pager_flush(pager_t *pager, const uint32_t page_num);
+int         pager_flush(pager_t *pager, const uint32_t page_num);
 
 #endif /* PAGER_H */
 
