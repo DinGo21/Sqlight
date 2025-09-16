@@ -1,5 +1,6 @@
-#include <stdlib.h>
 #include "input_buffer.h"
+
+#include <stdlib.h>
 
 input_buffer_t *
 input_buffer_new()

@@ -1,8 +1,9 @@
-#include <stdio.h>
 #include "input_buffer.h"
 #include "meta_command.h"
 #include "statement.h"
 #include "table.h"
+
+#include <stdio.h>
 
 void
 print_prompt()

@@ -1,8 +1,9 @@
-#include <stdlib.h>
-#include <unistd.h>
 #include "node.h"
 #include "pager.h"
 #include "table.h"
+
+#include <stdlib.h>
+#include <unistd.h>
 
 table_t *
 table_new(const char *filename)
@@ -31,27 +32,22 @@ table_new(const char *filename)
 void
 table_free(table_t *table)
 {
-    uint32_t    i;
     pager_t     *pager;
 
-    i = 0;
     pager = table->pager;
-    while (i < pager->num_pages)
+    for (uint32_t i = 0; i < pager->num_pages; i++)
     {
         while (pager->pages[i] == NULL)
             i++;
         pager_flush(pager, i);
         free(pager->pages[i]);
         pager->pages[i] = NULL;
-        i++;
     }
     close(pager->fd);
-    i = 0;
-    while (i < TABLE_MAX_PAGES)
+    for (uint32_t i = 0; i < TABLE_MAX_PAGES; i++)
     {
         if (pager->pages[i])
             free(pager->pages[i]);
-        i++;
     }
     free(pager);
     free(table);

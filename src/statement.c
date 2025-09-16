@@ -1,8 +1,9 @@
-#include <stdlib.h>
-#include <string.h>
 #include "cursor.h"
 #include "node.h"
 #include "statement.h"
+
+#include <stdlib.h>
+#include <string.h>
 
 static execute_result_t
 statement_exec_insert(statement_t *statement, table_t *table)
@@ -26,7 +27,7 @@ statement_exec_insert(statement_t *statement, table_t *table)
             return EXECUTE_DUPLICATE_KEY;
     }
     if (node_leaf_insert(cursor, statement->row_to_insert.id,
-                &statement->row_to_insert) < 0)
+                        &statement->row_to_insert) < 0)
         return EXECUTE_FATAL_ERROR;
     free(cursor);
     return EXECUTE_SUCCESS;

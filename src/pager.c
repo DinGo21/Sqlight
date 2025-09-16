@@ -1,9 +1,10 @@
+#include "globals.h"
+#include "pager.h"
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "globals.h"
-#include "pager.h"
 
 int
 pager_flush(pager_t *pager, const uint32_t page_num)
@@ -57,7 +58,6 @@ pager_get_unused_page_num(pager_t *pager)
 pager_t *
 pager_open(const char *filename)
 {
-    int     i;
     int     fd;
     pager_t *pager;
 
@@ -75,9 +75,8 @@ pager_open(const char *filename)
         printf("DB file is not a whole number of pages. Corrupt file\n");
         return (close(fd), free(pager), NULL);
     }
-    i = 0;
-    while (i < TABLE_MAX_PAGES)
-        pager->pages[i++] = NULL;
+    for (int i = 0; i < TABLE_MAX_PAGES; i++)
+        pager->pages[i] = NULL;
     return pager;
 }
 

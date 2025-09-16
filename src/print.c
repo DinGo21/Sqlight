@@ -1,7 +1,8 @@
-#include <stdio.h>
 #include "print.h"
 #include "globals.h"
 #include "node.h"
+
+#include <stdio.h>
 
 void 
 print_constants()
@@ -13,19 +14,14 @@ print_constants()
     printf("LEAF_NODE_CELL_SIZE: %d\n", LEAF_NODE_CELL_SIZE);
     printf("LEAF_NODE_SPACE_FOR_CELLS: %d\n", LEAF_NODE_SPACE_FOR_CELLS);
     printf("LEAF_NODE_MAX_CELLS: %d\n", LEAF_NODE_MAX_CELLS);
+    printf("LEAF_NODE_LEFT_SPLIT_COUNT: %d\n", LEAF_NODE_LEFT_SPLIT_COUNT);
 }
 
 static void
 print_indent(const int level)
 {
-    int i;
-
-    i = 0;
-    while (i < level)
-    {
+    for (int i = 0; i < level; i++)
         printf("    ");
-        i++;
-    }
 }
 
 static void
