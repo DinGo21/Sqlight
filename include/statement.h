@@ -34,7 +34,7 @@ typedef struct statement_s
 }   statement_t;
 
 /**
- * Initializes the statement process.
+ * Initialize the statement process.
  *
  * @param input_buffer Pointer to the input buffer.
  * @param table Pointer to the table.

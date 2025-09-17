@@ -12,14 +12,14 @@ typedef struct input_buffer_s
 }   input_buffer_t;
 
 /**
- * Creates new input buffer.
+ * Create new input buffer.
  *
  * @return Pointer to the input buffer or NULL in case of error.
  */
 input_buffer_t  *input_buffer_new();
 
 /**
- * Closes input buffer.
+ * Close `input_buffer`.
  *
  * @param input_buffer Pointer to the input buffer.
  */

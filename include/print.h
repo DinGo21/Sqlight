@@ -1,8 +1,9 @@
 #ifndef PRINT_H
 # define PRINT_H
 
-# include <stdint.h>
 # include "pager.h"
+
+# include <stdint.h>
 
 void    print_constants();
 

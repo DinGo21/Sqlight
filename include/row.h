@@ -14,7 +14,7 @@ typedef struct row_s
 }   row_t;
 
 /**
- * Serializes `src` row into `dest`.
+ * Serialize `src` row into `dest`.
  *
  * @param src Pointer to the row.
  * @param dest Pointer to the destination.
@@ -22,7 +22,7 @@ typedef struct row_s
 void    row_serialize(row_t *src, void *dest);
 
 /**
- * Deserializes `src` into `dest` row.
+ * Deserialize `src` into `dest` row.
  *
  * @param src Pointer to the source.
  * @param dest Pointer to the row.

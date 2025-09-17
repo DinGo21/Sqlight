@@ -14,7 +14,7 @@ typedef struct pager_s
 }   pager_t;
 
 /**
- * Opens new pager.
+ * Open new pager.
  *
  * @param filename Path to database.
  *
@@ -23,7 +23,7 @@ typedef struct pager_s
 pager_t     *pager_open(const char *filename);
 
 /**
- * Gets `page_num` page from `pager`.
+ * Get `page_num` page from `pager`.
  *
  * @param pager Pointer to pager.
  * @param page_num Number of page.

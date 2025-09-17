@@ -10,7 +10,7 @@ typedef struct table_s
 }   table_t;
 
 /**
- * Creates new table.
+ * Create new table.
  *
  * @param filename Path to database.
  *
@@ -19,7 +19,7 @@ typedef struct table_s
 table_t *table_new(const char *filename);
 
 /**
- * Frees table.
+ * Free `table`.
  *
  * @param table Pointer to the table;
  */

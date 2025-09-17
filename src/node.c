@@ -10,29 +10,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-uint32_t *
-node_leaf_move_to_num_cells(void *node)
-{
-    return node + LEAF_NODE_NUM_CELLS_OFFSET;
-}
-
-void *
-node_leaf_move_to_cell(void *node, const uint32_t cell_num)
-{
-    return node + LEAF_NODE_HEADER_SIZE + cell_num * LEAF_NODE_CELL_SIZE;
-}
-
-uint32_t *
-node_leaf_move_to_key(void *node, const uint32_t cell_num)
-{
-    return node_leaf_move_to_cell(node, cell_num);
-}
-
-void *
-node_leaf_move_to_value(void *node, const uint32_t cell_num)
-{
-    return node_leaf_move_to_cell(node, cell_num) + LEAF_NODE_KEY_SIZE;
-}
 
 node_type_t
 node_get_type(const void *node)
@@ -240,6 +217,30 @@ node_leaf_find(cursor_t *cursor, table_t *table, const uint32_t page_num,
     if (cursor->cell_num >= (*node_leaf_move_to_num_cells(node)))
         cursor->end_of_table = 1;
     return 0;
+}
+
+uint32_t *
+node_leaf_move_to_num_cells(void *node)
+{
+    return node + LEAF_NODE_NUM_CELLS_OFFSET;
+}
+
+void *
+node_leaf_move_to_cell(void *node, const uint32_t cell_num)
+{
+    return node + LEAF_NODE_HEADER_SIZE + cell_num * LEAF_NODE_CELL_SIZE;
+}
+
+uint32_t *
+node_leaf_move_to_key(void *node, const uint32_t cell_num)
+{
+    return node_leaf_move_to_cell(node, cell_num);
+}
+
+void *
+node_leaf_move_to_value(void *node, const uint32_t cell_num)
+{
+    return node_leaf_move_to_cell(node, cell_num) + LEAF_NODE_KEY_SIZE;
 }
 
 void

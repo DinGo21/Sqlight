@@ -11,7 +11,7 @@ typedef enum meta_command_result_e
 }   meta_command_result_t;
 
 /**
- * Initializes the meta_command process.
+ * Initialize the meta command process.
  *
  * @param input_buffer Pointer to the input buffer.
  * @param table Pointer to the table.

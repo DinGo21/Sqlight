@@ -12,7 +12,7 @@ typedef struct cursor_s
 }   cursor_t;
 
 /**
- * Initializes a cursor at the start of `table`.
+ * Initialize a cursor at the start of `table`.
  *
  * @param table Pointer to the table;
  *
@@ -21,7 +21,7 @@ typedef struct cursor_s
 cursor_t    *cursor_init_to_start(table_t *table);
 
 /**
- * Initializes a cursor at the end of `table`.
+ * Initialize a cursor at the end of `table`.
  *
  * @param table Pointer to the table.
  *
@@ -41,7 +41,7 @@ cursor_t    *cursor_init_to_end(table_t *table);
 cursor_t    *cursor_find(table_t *table, const uint32_t key);
 
 /**
- * Gets the current value `cursor` is pointing to.
+ * Get the current value `cursor` is pointing to.
  *
  * @param cursor Pointer to the cursor.
  *
@@ -50,7 +50,7 @@ cursor_t    *cursor_find(table_t *table, const uint32_t key);
 void        *cursor_get_value(const cursor_t *cursor);
 
 /**
- * Advances up to one cell from the table `cursor` is pointing to.
+ * Advance up to one cell from the table `cursor` is pointing to.
  *
  * @param cursor Pointer to the cursor.
  *
