@@ -21,8 +21,12 @@ const uint8_t   COMMON_NODE_HEADER_SIZE = NODE_TYPE_SIZE + IS_ROOT_SIZE +
 
 const uint32_t  LEAF_NODE_NUM_CELLS_SIZE = sizeof(uint32_t);
 const uint32_t  LEAF_NODE_NUM_CELLS_OFFSET = COMMON_NODE_HEADER_SIZE;
+const uint32_t  LEAF_NODE_NEXT_LEAF_SIZE = sizeof(uint32_t);
+const uint32_t  LEAF_NODE_NEXT_LEAF_OFFSET = LEAF_NODE_NUM_CELLS_OFFSET +
+                                            LEAF_NODE_NEXT_LEAF_SIZE;
 const uint32_t  LEAF_NODE_HEADER_SIZE = COMMON_NODE_HEADER_SIZE +
-                                        LEAF_NODE_NUM_CELLS_SIZE;
+                                        LEAF_NODE_NUM_CELLS_SIZE +
+                                        LEAF_NODE_NEXT_LEAF_SIZE;
 const uint32_t  LEAF_NODE_KEY_SIZE = sizeof(uint32_t);
 const uint32_t  LEAF_NODE_KEY_OFFSET = 0;
 const uint32_t  LEAF_NODE_VALUE_SIZE = ROW_SIZE;

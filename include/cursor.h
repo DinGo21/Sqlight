@@ -35,7 +35,7 @@ cursor_t    *cursor_init_to_end(table_t *table);
  * @param table Pointer to the table.
  * @param key Key to find in the table.
  *
- * @return Pointer to the cursor positioned at the key, if the key is not
+ * @return Pointer to a new cursor positioned at the key, if the key is not
  * present returns the position where it should be or NULL in case of error.
  */
 cursor_t    *cursor_find(table_t *table, const uint32_t key);

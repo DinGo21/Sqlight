@@ -10,19 +10,16 @@ cursor_t *
 cursor_init_to_start(table_t *table)
 {
     cursor_t    *cursor;
-    void        *root_node;
+    void        *node;
     uint32_t    num_cells;
 
-    cursor = malloc(sizeof(*cursor));
+    cursor = cursor_find(table, 0);
     if (cursor == NULL)
         return NULL;
-    cursor->table = table;
-    cursor->page_num = table->root_page_num;
-    cursor->cell_num = 0;
-    root_node = pager_get_page(table->pager, table->root_page_num);
-    if (root_node == NULL)
+    node = pager_get_page(table->pager, cursor->page_num);
+    if (node == NULL)
         return NULL;
-    num_cells = *node_leaf_move_to_num_cells(root_node);
+    num_cells = *node_leaf_move_to_num_cells(node);
     cursor->end_of_table = (num_cells == 0);
     return cursor;
 }
@@ -91,14 +88,23 @@ cursor_get_value(const cursor_t *cursor)
 int
 cursor_advance(cursor_t *cursor)
 {
-    void    *node;
+    void        *node;
+    uint32_t    next_page_num;
 
     node = pager_get_page(cursor->table->pager, cursor->page_num);
     if (node == NULL)
         return -1;
     cursor->cell_num++;
-    if (cursor->cell_num >= (*node_leaf_move_to_num_cells(node)))
+    if (cursor->cell_num < *node_leaf_move_to_num_cells(node))
+        return 0;
+    next_page_num = *node_leaf_move_to_next_leaf(node);
+    if (next_page_num == 0)
         cursor->end_of_table = 1;
+    else
+    {
+        cursor->cell_num = 0;
+        cursor->page_num = next_page_num;
+    }
     return 0;
 }
 

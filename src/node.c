@@ -89,6 +89,7 @@ node_leaf_init(void *node)
     node_set_type(node, NODE_LEAF);
     node_set_root(node, 0);
     *node_leaf_move_to_num_cells(node) = 0;
+    *node_leaf_move_to_next_leaf(node) = 0;
 }
 
 static void
@@ -144,8 +145,11 @@ node_leaf_split(cursor_t *cursor, const uint32_t key, row_t *value)
         return -1;
     node_leaf_init(new_node);
     node_leaf_insert_into_split(cursor, value, key, old_node, new_node);
-    *(node_leaf_move_to_num_cells(old_node)) = LEAF_NODE_LEFT_SPLIT_COUNT;
-    *(node_leaf_move_to_num_cells(new_node)) = LEAF_NODE_RIGHT_SPLIT_COUNT;
+    *node_leaf_move_to_num_cells(old_node) = LEAF_NODE_LEFT_SPLIT_COUNT;
+    *node_leaf_move_to_num_cells(new_node) = LEAF_NODE_RIGHT_SPLIT_COUNT;
+    *node_leaf_move_to_next_leaf(new_node) = *node_leaf_move_to_next_leaf(
+                                                                    old_node);
+    *node_leaf_move_to_next_leaf(old_node) = new_page_num;
     if (node_is_root(old_node))
         return node_create_root(cursor->table, new_page_num);
     //TODO: update parent.
@@ -214,8 +218,6 @@ node_leaf_find(cursor_t *cursor, table_t *table, const uint32_t page_num,
         return -1;
     cursor->page_num = page_num;
     cursor->cell_num = node_leaf_find_cell_num(node, key);
-    if (cursor->cell_num >= (*node_leaf_move_to_num_cells(node)))
-        cursor->end_of_table = 1;
     return 0;
 }
 
@@ -223,6 +225,12 @@ uint32_t *
 node_leaf_move_to_num_cells(void *node)
 {
     return node + LEAF_NODE_NUM_CELLS_OFFSET;
+}
+
+uint32_t *
+node_leaf_move_to_next_leaf(void *node)
+{
+    return node + LEAF_NODE_NEXT_LEAF_OFFSET;
 }
 
 void *

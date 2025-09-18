@@ -106,6 +106,15 @@ int         node_leaf_find(cursor_t *cursor, table_t *table,
 uint32_t    *node_leaf_move_to_num_cells(void *node);
 
 /**
+ * Move leaf node pointer up to next_leaf offset.
+ *
+ * @param Pointer to node.
+ *
+ * @return Initial pointe plus next_leaf offset.
+ */
+uint32_t    *node_leaf_move_to_next_leaf(void *node);
+
+/**
  * Move leaf node pointer to `cell_num` cell.
  *
  * @param node Pointer to node.
