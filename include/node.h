@@ -28,6 +28,8 @@ node_type_t node_get_type(const void *node);
  */
 void        node_set_type(void *node, node_type_t type);
 
+uint32_t    *node_move_to_parent(void *node);
+
 /**
  * Create root node.
  *
@@ -151,6 +153,9 @@ void        *node_leaf_move_to_value(void *node, const uint32_t cell_num);
  */
 void        node_internal_init(void *node);
 
+int         node_internal_insert(table_t *table, uint32_t parent_page_num,
+                                uint32_t child_page_num);
+
 /**
  * Given a key, find key position inside `page_num`.
  *
@@ -163,6 +168,8 @@ void        node_internal_init(void *node);
  */
 int         node_internal_find(cursor_t *cursor, table_t *table,
                                 const uint32_t page_num, const uint32_t key);
+
+uint32_t    node_internal_find_child(void *node, const uint32_t key);
 
 /**
  * Move internal node pointer up to num_keys offset.
@@ -211,6 +218,9 @@ uint32_t    *node_internal_move_to_child(void *node, uint32_t child_num);
  * @return Pointer to the value of the given key.
  */
 uint32_t    *node_internal_move_to_key(void *node, uint32_t key_num);
+
+void        node_internal_update_key(void *node, uint32_t old_key,
+                                    uint32_t new_key);
 
 #endif /* NODE_H */
 
