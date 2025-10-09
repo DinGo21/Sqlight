@@ -45,7 +45,6 @@ print_node_leaf(void *node, const int indent_level)
 static void
 print_node_internal(void *pager, void *node, const int indent_level)
 {
-    uint32_t    i;
     uint32_t    num_keys;
     uint32_t    child;
 
@@ -53,14 +52,14 @@ print_node_internal(void *pager, void *node, const int indent_level)
     num_keys = *node_internal_move_to_num_keys(node);
     print_indent(indent_level);
     printf("- internal (size %d)\n", num_keys);
-    i = 0;
-    while (i < num_keys)
+    if (num_keys == 0)
+        return;
+    for (uint32_t i = 0; i < num_keys; i++)
     {
         child = *node_internal_move_to_child(node, i);
         print_tree(pager, child, indent_level + 1);
         print_indent(indent_level + 1);
         printf("- key %d\n", *node_internal_move_to_key(node, i));
-        i++;
     }
     child = *node_internal_move_to_right_child(node);
     print_tree(pager, child, indent_level + 1);

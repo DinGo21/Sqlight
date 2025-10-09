@@ -153,6 +153,9 @@ void        *node_leaf_move_to_value(void *node, const uint32_t cell_num);
  */
 void        node_internal_init(void *node);
 
+int         node_internal_split(table_t *table, uint32_t parent_page_num,
+                                uint32_t child_page_num);
+
 int         node_internal_insert(table_t *table, uint32_t parent_page_num,
                                 uint32_t child_page_num);
 

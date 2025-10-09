@@ -4,6 +4,7 @@
 # include <stdint.h>
 
 # define TABLE_MAX_PAGES 100
+# define INVALID_PAGE_NUM UINT32_MAX
 
 typedef struct pager_s
 {
